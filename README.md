@@ -1,44 +1,48 @@
 <div align="center">
 
-# Skills Brain · 技能大脑
+# Skills Brain
 
-**把分散的 Agent Skills，连接成可探索的能力网络。**
+**Connect scattered Agent Skills into an explorable capability graph.**
 
-本地优先 · 交互脑图 · 网络关联 · 原文阅读
+Local-first · Interactive graph · Related skills · Source reader
 
-[快速安装](#快速安装) · [功能](#功能) · [作为-agent-skill-安装](#作为-agent-skill-安装) · [配置](#配置) · [贡献指南](CONTRIBUTING.md)
+**English** | [简体中文](README.zh-CN.md)
+
+[Quick start](#quick-start) · [Features](#features) · [Install-as-an-agent-skill](#install-as-an-agent-skill) · [Configuration](#configuration) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
-Skills Brain 是一个运行在电脑上的技能浏览器。它读取本地 `SKILL.md`，按用途生成脑图，并从公开 GitHub 技能目录中寻找相关能力。适合希望整理技能库、了解技能用途、发现替代方案的 Agent 用户。
+Skills Brain is a local skill browser. It reads your `SKILL.md` files, groups them by purpose, and finds related capabilities in public GitHub skill repositories. Use it to organize your library, understand what each skill does, and discover alternatives.
 
-**无需 API Key。无需数据库。本地技能内容不上传。**
+**No API key. No database. Local skill content is not uploaded.**
 
-## 功能
+The application interface is currently in Simplified Chinese. This README documents the existing application; English UI localization is not yet included.
 
-| 能力 | 使用方式 |
+## Features
+
+| Capability | How it works |
 | --- | --- |
-| 本地技能扫描 | 自动读取个人、系统和插件缓存目录，按内容哈希去重；点击「同步技能」刷新 |
-| 六大能力领域 | 设计与创意、开发与构建、文档与表达、知识与研究、数据与分析、工具与工作流 |
-| 交互脑图 | 选择类别聚焦星簇；点击父节点高亮；选择技能单独高亮 |
-| 缩放与移动 | 拖动平移、连续双击放大、触控板/触屏双指缩放、按钮缩放和重置 |
-| 列表筛选 | 名称和描述搜索；选择具体技能后列表仅显示它；关闭选中标签返回全部 |
-| 可收起左栏 | 标题按钮、侧栏边缘点击、左右拖拽；收起后保留图标 |
-| 文件夹跳转 | 本地条目右侧按钮打开技能所在文件夹 |
-| 原文阅读 | 技能名称旁的文档按钮打开独立阅读窗口，支持键盘关闭 |
-| 网络关联 | 按名称、描述关键词与能力领域匹配，显示 GitHub 来源和关键词标签 |
-| 可调整详情面板 | 拖拽分隔条调整宽度，桌面最小 300px；详情固定，仅关联列表滚动 |
-| 键盘与动态效果 | 键盘选择节点和调节分隔条；系统减少动态效果时停止节点动画 |
+| Local discovery | Scan personal, system, and plugin-cache directories; deduplicate by content hash; refresh with Sync skills |
+| Six capability areas | Design & creativity, development & building, documents & communication, knowledge & research, data & analysis, tools & workflows |
+| Interactive graph | Focus a category cluster, highlight parent nodes, or isolate a selected skill |
+| Navigation | Drag to pan, double-click repeatedly to zoom in, pinch on a trackpad or touchscreen, and use zoom/reset controls |
+| List filtering | Search names and descriptions; selecting a skill filters the list to it; dismiss the selected-name chip to clear the selection |
+| Collapsible sidebar | Use the header button, click the sidebar edge, or drag it left/right; icons remain visible when collapsed |
+| Folder shortcuts | Open a skill's containing folder from its sidebar entry |
+| Source reader | Open the document icon next to the skill name for a separate, keyboard-accessible reading dialog |
+| Related skills | Match names, descriptions, and categories; inspect GitHub sources and shared-keyword tags |
+| Resizable inspector | Drag the divider to resize the desktop inspector, with a 300px minimum; skill details stay fixed while related results scroll |
+| Keyboard and motion | Select graph nodes and adjust dividers with the keyboard; node animation respects reduced-motion preferences |
 
-## 快速安装
+## Quick start
 
-### 环境要求
+### Requirements
 
-- Node.js **22.13 或更新版本**，建议使用受维护的 LTS 版本。
-- npm（随 Node.js 安装）和 Git；也可以下载 ZIP，不需要 Git。
-- macOS、Windows 或带图形桌面的 Linux。文件夹跳转分别使用 `open`、`explorer.exe`、`xdg-open`。当前开发验证在 macOS 完成。
+- **Node.js 22.13 or later**. A maintained LTS release is recommended.
+- npm, included with Node.js, and Git. Git is optional if you download a ZIP.
+- macOS, Windows, or Linux with a graphical desktop. Folder shortcuts use `open`, `explorer.exe`, and `xdg-open`, respectively. Development validation has been performed on macOS.
 
-### 方式一：克隆源码
+### Option 1: Clone the repository
 
 ```sh
 git clone https://github.com/YuY-QK/skills-brain.git
@@ -47,20 +51,20 @@ npm ci
 npm start
 ```
 
-打开 **[http://127.0.0.1:5173](http://127.0.0.1:5173)**。保持终端运行；按 `Ctrl+C` 停止服务。
+Open **[http://127.0.0.1:5173](http://127.0.0.1:5173)**. Keep the terminal running while you use the app. Press `Ctrl+C` to stop it.
 
-### 方式二：下载 ZIP
+### Option 2: Download a ZIP
 
-1. [下载 main 分支源码 ZIP](https://github.com/YuY-QK/skills-brain/archive/refs/heads/main.zip)，或在仓库页面选择 **Code → Download ZIP**。
-2. 解压，在包含 `package.json` 的目录打开终端。
-3. 运行 `npm ci`，然后运行 `npm start`。
-4. 打开本地地址。
+1. [Download the main branch ZIP](https://github.com/YuY-QK/skills-brain/archive/refs/heads/main.zip), or select **Code → Download ZIP** on GitHub.
+2. Extract it and open a terminal in the directory containing `package.json`.
+3. Run `npm ci`, then `npm start`.
+4. Open the local address.
 
-这是源码安装的本地应用，尚未提供独立桌面安装包，也未发布到 npm 注册表。
+This is a source-installed local application. Standalone desktop installers and an npm registry package are not currently provided.
 
-### 更新
+### Updating
 
-在保留个人配置的前提下，停止服务，然后执行：
+Stop the server, preserve any personal configuration changes, then run:
 
 ```sh
 git pull --ff-only
@@ -68,32 +72,32 @@ npm ci
 npm start
 ```
 
-若修改了源码，先提交或备份自己的改动再更新。
+If you have edited the source, commit or back up your changes before updating.
 
-## 作为 Agent Skill 安装
+## Install as an Agent Skill
 
-仓库根目录提供标准 [`SKILL.md`](SKILL.md)，用于指导支持 Agent Skills 的助手安装、启动和使用 Skills Brain。**安装 Skill 指令不会自动安装或启动网页应用。**
+The repository includes a standard [`SKILL.md`](SKILL.md) that guides a compatible agent through installing, launching, and using Skills Brain. **Installing the skill instructions does not automatically install or start the web application.**
 
-手动安装时，将 `SKILL.md` 复制到你的 Agent 技能目录的 `skills-brain/` 子目录。例如，在 macOS / Linux 的仓库目录内：
+For manual installation, copy `SKILL.md` into a `skills-brain/` subdirectory of your agent's skill directory. For example, from the repository directory on macOS or Linux:
 
 ```sh
 mkdir -p ~/.agents/skills/skills-brain
 cp SKILL.md ~/.agents/skills/skills-brain/SKILL.md
 ```
 
-如果 Agent 使用其他目录，将目标替换为其支持的技能路径。重新加载技能后，可以说：
+If your agent uses another skill location, change the destination accordingly. Once the skill is loaded, try:
 
-> 使用 skills-brain 帮我打开本地技能脑图，并查看设计类技能的相似能力。
+> Use skills-brain to open my local skill graph and find related design skills.
 
-应用源码仍需按「快速安装」单独安装。不要把整个 `node_modules` 复制进技能目录。
+Install the application separately using the quick-start steps above. Do not copy `node_modules` into your skill directory.
 
-## 配置
+## Configuration
 
-当前配置集中在 [`server/skills.mjs`](server/skills.mjs)。修改后本地开发服务会重新加载。
+Configuration currently lives in [`server/skills.mjs`](server/skills.mjs). The local development server reloads when this file changes.
 
-### 本地目录
+### Local directories
 
-默认扫描当前用户主目录下的：
+The default scan roots are relative to the current user's home directory:
 
 ```text
 ~/.agents/skills
@@ -101,53 +105,53 @@ cp SKILL.md ~/.agents/skills/skills-brain/SKILL.md
 ~/.codex/plugins/cache
 ```
 
-可以修改 `roots` 数组，增加其他 Agent 的技能目录或项目内目录，例如 `path.join(homedir(), '.claude/skills')`。不要添加包含无关文件的整个主目录。
+Edit the `roots` array to add another agent's skill directory or a project directory, such as `path.join(homedir(), '.claude/skills')`. Avoid scanning an entire home directory containing unrelated files.
 
-扫描最多深入 9 层，跳过 `.git`、`node_modules`、`references`、`scripts`、`assets` 等目录。插件缓存中可能有未启用的技能，因此扫描结果不等于某个 Agent 当前会话的启用列表。内容完全一致的技能合并显示，保留先扫描到的路径。当前不递归跟随目录符号链接。
+Scanning is limited to nine nested levels and skips directories such as `.git`, `node_modules`, `references`, `scripts`, and `assets`. Plugin caches may contain inactive skills, so discovered files do not necessarily represent the skills enabled in an agent session. Identical content is deduplicated, retaining the first discovered path. The scanner currently does not follow directory symlinks.
 
-### 网络来源
+### Public repositories
 
-默认读取：
+Default sources:
 
 - [anthropics/skills](https://github.com/anthropics/skills)
 - [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills)
 
-可以修改 `repositories` 数组，使用 `owner/repository` 格式。当前读取 `main` 分支，每个来源最多 60 个 `SKILL.md`；结果保存在进程内存中 1 小时，重启清除缓存。刷新按钮在缓存有效期内会复用缓存。
+Edit the `repositories` array using `owner/repository` entries. The current implementation reads the `main` branch, with a maximum of 60 `SKILL.md` files per repository. Results are cached in process memory for one hour; restarting clears the cache. The refresh button reuses results while the cache is valid.
 
-匹配使用**英文关键词交集 + 同领域加权**，不是 embedding 模型，也不是全网搜索。共同关键词说明关联依据，不代表质量评分或安全背书。未达到阈值时不显示推荐。
+Matching uses **English keyword overlap plus a same-category bonus**. It is not an embedding model or a search across the entire web. Shared keywords explain the match; they do not imply quality ratings or security endorsements. Candidates below the matching threshold are omitted.
 
-### 端口
+### Port
 
-默认端口为 5173。如被占用：
+The default port is 5173. If it is occupied:
 
 ```sh
 npm run dev -- --port 5174
 ```
 
-使用终端输出的地址。服务仅监听 `127.0.0.1`；不要将其暴露到公网。
+Use the address printed in the terminal. The server listens only on `127.0.0.1`; do not expose it to the public internet.
 
-## 数据与权限
+## Data and permissions
 
-- 本地文件只读；应用不安装、修改或执行技能内容。
-- 本地技能名称、描述和原文通过本机接口交给浏览器，不上传至 GitHub。
-- 网络请求仅下载已配置的公开仓库目录和技能文件；GitHub 能看到正常请求信息，如 IP。
-- 文件夹按钮只接受扫描结果中的技能 ID，以独立参数调用系统文件管理器，不接受任意路径或 Shell 命令。
-- 文件夹打开接口要求同源 JSON POST；本地读取接口拒绝跨源请求。
-- 打开外部来源链接会跳转至对应 GitHub 页面。
+- Local skill files are read-only. The app does not install, modify, or execute skills.
+- Local names, descriptions, and source content are served to your browser through a local endpoint, not uploaded to GitHub.
+- Network requests download public repository trees and skill files from the configured sources. GitHub receives normal request information, such as your IP address.
+- Folder shortcuts accept only IDs found in the local scan. The directory is passed to the operating system's file manager as a separate argument; arbitrary paths and shell commands are not accepted.
+- Opening a folder requires a same-origin JSON POST. Local read endpoints reject cross-origin requests.
+- External source links navigate to the corresponding GitHub page.
 
-## 常见问题
+## Troubleshooting
 
-**没有找到技能？** 检查 `roots` 指向实际技能目录，文件名应为 `SKILL.md`，再点击同步。缺失或无权限目录会在底部状态显示读取错误。
+**No local skills found?** Check that `roots` points to your actual skill directories and files are named `SKILL.md`, then sync again. Missing or unreadable directories are reported in the bottom status bar.
 
-**网络技能为 0 或只有部分结果？** 检查网络；匿名 GitHub API 有配额，稍后刷新。离线时仍可查看本地技能。
+**No remote skills, or only partial results?** Check your network connection. Anonymous GitHub API requests are rate-limited; try refreshing later. Local browsing remains available offline.
 
-**点击文件夹没有反应？** 查看界面提示。Linux 需要图形桌面和 `xdg-open`。SSH、容器或无桌面服务环境不能保证打开文件管理器。
+**Folder shortcut does not work?** Read the on-screen error. Linux requires a graphical desktop and `xdg-open`. File-manager launching is not guaranteed in SSH, containers, or headless environments.
 
-**缩放后找不到节点？** 点击右下角环形箭头「重置视图」。选中标签右侧的 × 会取消单个技能/类别筛选。
+**Lost your place after zooming?** Click the circular-arrow Reset view button in the lower-right corner. The × on the selected-name chip clears skill/category filtering.
 
-**能部署到云端吗？** 当前版本需要本机文件系统和桌面能力。`npm run build` 验证前端编译，不会生成可在云端扫描你电脑的服务。完整应用使用 `npm start` 运行。
+**Can this run in the cloud?** The current version depends on the local filesystem and desktop capabilities. `npm run build` validates frontend compilation; it does not produce a cloud service that can scan your computer. Use `npm start` for the complete local application.
 
-## 开发
+## Development
 
 ```sh
 npm ci
@@ -157,25 +161,25 @@ npm test
 npm run build
 ```
 
-核心结构：
+Core structure:
 
 ```text
-app/page.tsx             脑图、选择状态、两侧面板与手势
-app/globals.css          主题、布局与动画
-server/skills.mjs        扫描、匹配来源读取、本地接口和文件夹打开
-server/skills.test.mjs   元信息解析、扫描与文件夹调用验证
-components/ui/          可访问的基础组件
-SKILL.md                Agent Skill 入口
+app/page.tsx             Graph, selection state, panels, and gestures
+app/globals.css          Theme, layout, and animation
+server/skills.mjs        Scanner, public-source fetching, local endpoints, folder launching
+server/skills.test.mjs   Metadata parsing, scanning, and folder-launch tests
+components/ui/          Accessible interface primitives
+SKILL.md                Agent Skill entry point
 ```
 
-技术栈：React 19、TypeScript、Vinext / Vite、Tailwind CSS、Base UI、Lucide、react-resizable-panels。浏览器交互和不同操作系统的文件管理器行为仍建议在目标设备上验证。
+Built with React 19, TypeScript, Vinext / Vite, Tailwind CSS, Base UI, Lucide, and react-resizable-panels. Browser interactions and platform-specific file-manager behavior should still be verified on your target devices.
 
-## CI 模板
+## CI template
 
-[`docs/ci-workflow.yml`](docs/ci-workflow.yml) 包含自动安装依赖、类型检查、测试和构建配置。当前尚未启用：首次推送所用令牌不具备 GitHub `workflow` 权限。具备权限的维护者可将该文件复制到 `.github/workflows/ci.yml` 并提交，即可启用 GitHub Actions。
+[`docs/ci-workflow.yml`](docs/ci-workflow.yml) includes dependency installation, type checking, tests, and a build. It is not enabled yet: the token used for the initial push lacked GitHub's `workflow` permission. A maintainer with sufficient access can copy it to `.github/workflows/ci.yml` and commit it to enable GitHub Actions.
 
-## 贡献与许可证
+## Contributing and license
 
-欢迎通过 [Issues](https://github.com/YuY-QK/skills-brain/issues) 提交问题，或参考 [CONTRIBUTING.md](CONTRIBUTING.md) 提交改进。
+Report problems through [Issues](https://github.com/YuY-QK/skills-brain/issues), or see [CONTRIBUTING.md](CONTRIBUTING.md) for contribution instructions (currently in Chinese).
 
-项目采用 [MIT License](LICENSE)。依赖及远程技能保留各自的许可证；本仓库不重新分发你的本地技能或远程技能正文。
+This project is licensed under the [MIT License](LICENSE). Dependencies and remote skills retain their own licenses. This repository does not redistribute your local skills or remote skill bodies.
