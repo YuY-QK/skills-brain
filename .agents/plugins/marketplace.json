@@ -1,7 +1,7 @@
 {
-  "name": "personal",
+  "name": "skills-brain-marketplace",
   "interface": {
-    "displayName": "Personal"
+    "displayName": "Skills Brain Marketplace"
   },
   "plugins": [
     {

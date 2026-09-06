@@ -12,6 +12,8 @@ Local-first · Interactive graph · Related skills · Source reader
 
 </div>
 
+![Skills Brain demo — browse local skills, focus a category, and discover related skills on GitHub](docs/assets/skills-brain-demo.gif)
+
 Skills Brain is a local skill browser. It reads your `SKILL.md` files, groups them by purpose, and finds related capabilities in public GitHub skill repositories. Use it to organize your library, understand what each skill does, and discover alternatives.
 
 **No API key. No database. Local skill content is not uploaded.**
@@ -74,6 +76,16 @@ Restart Codex after setup. Diagnose the installation with `npm run doctor`. The 
 
 Choose either this setup method or the marketplace method below. Installing both creates duplicate `skills-brain` entries.
 
+### One-paste Codex installation
+
+For a Codex-only setup, the bundled marketplace is the fastest path. Paste this single command into a terminal, then restart Codex:
+
+```sh
+codex plugin marketplace add YuY-QK/skills-brain --ref main && codex plugin add skills-brain@skills-brain-marketplace
+```
+
+This installs the bundled Skill and the read-only local MCP server from the plugin cache; a separate source checkout is not needed.
+
 ### Updating
 
 Stop the server, preserve any personal configuration changes, then run:
@@ -90,7 +102,7 @@ To remove the managed Skill and MCP registration while keeping the application c
 npm run uninstall
 ```
 
-This command removes only the guided-setup installation. A marketplace-installed plugin is managed with `codex plugin remove skills-brain@personal`.
+This command removes only the guided-setup installation. A marketplace-installed plugin is managed with `codex plugin remove skills-brain@skills-brain-marketplace`.
 
 ## Codex integration
 
@@ -120,10 +132,10 @@ Alternatively, install it through the repository marketplace without running `np
 
 ```sh
 codex plugin marketplace add YuY-QK/skills-brain --ref main
-codex plugin add skills-brain@personal
+codex plugin add skills-brain@skills-brain-marketplace
 ```
 
-Restart Codex after installation. Use `codex plugin marketplace upgrade personal` to fetch a newer marketplace snapshot, then reinstall the plugin through Codex. The plugin package contains its own MCP runtime files, so it works from Codex's plugin cache without the source checkout.
+Restart Codex after installation. Use `codex plugin marketplace upgrade skills-brain-marketplace` to fetch a newer marketplace snapshot, then reinstall the plugin through Codex. The plugin package contains its own MCP runtime files, so it works from Codex's plugin cache without the source checkout.
 
 ## Install as an Agent Skill
 

@@ -12,6 +12,8 @@
 
 </div>
 
+![Skills Brain 演示：浏览本地技能、聚焦类别，并发现 GitHub 上的关联技能](docs/assets/skills-brain-demo.gif)
+
 Skills Brain 是一个运行在电脑上的技能浏览器。它读取本地 `SKILL.md`，按用途生成脑图，并从公开 GitHub 技能目录中寻找相关能力。适合希望整理技能库、了解技能用途、发现替代方案的 Agent 用户。
 
 **无需 API Key。无需数据库。本地技能内容不上传。**
@@ -72,6 +74,16 @@ npm run setup
 
 请在引导式安装和下方 marketplace 安装之间选择一种；两种都安装会出现重复的 `skills-brain` 条目。
 
+### 一条命令安装到 Codex
+
+如果只需要在 Codex 中使用，这是最快的方式。将下面整行粘贴到终端，完成后重启 Codex：
+
+```sh
+codex plugin marketplace add YuY-QK/skills-brain --ref main && codex plugin add skills-brain@skills-brain-marketplace
+```
+
+该方式从插件缓存安装内置的 Skill 和只读本地 MCP，不需要另外保留源码目录。
+
 ### 更新
 
 在保留个人配置的前提下，停止服务，然后执行：
@@ -88,7 +100,7 @@ npm run update
 npm run uninstall
 ```
 
-此命令只移除引导式安装。通过 marketplace 安装的插件请使用 `codex plugin remove skills-brain@personal` 管理。
+此命令只移除引导式安装。通过 marketplace 安装的插件请使用 `codex plugin remove skills-brain@skills-brain-marketplace` 管理。
 
 ## Codex 集成
 
@@ -110,10 +122,10 @@ v0.3 提供只读本地 MCP。执行 `npm run setup` 并重启 Codex 后，即�
 
 ```sh
 codex plugin marketplace add YuY-QK/skills-brain --ref main
-codex plugin add skills-brain@personal
+codex plugin add skills-brain@skills-brain-marketplace
 ```
 
-安装后重启 Codex。使用 `codex plugin marketplace upgrade personal` 获取新的 marketplace 快照，再通过 Codex 重新安装插件。插件包自带 MCP 运行文件，从 Codex 插件缓存中即可运行，不依赖原始源码目录。
+安装后重启 Codex。使用 `codex plugin marketplace upgrade skills-brain-marketplace` 获取新的 marketplace 快照，再通过 Codex 重新安装插件。插件包自带 MCP 运行文件，从 Codex 插件缓存中即可运行，不依赖原始源码目录。
 
 ## 作为 Agent Skill 安装
 
