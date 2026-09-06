@@ -14,6 +14,7 @@ import {
   Compass,
   FolderOpen,
   ChevronRight,
+  ChevronDown,
   Code2,
   Layers,
   FileText,
@@ -168,7 +169,9 @@ export default function Home() {
   const [collapsed, setCollapsed] = useState(false),
     [focusedSkill, setFocusedSkill] = useState<string | null>(null),
     [connectionQuery, setConnectionQuery] = useState(''),
-    [compact, setCompact] = useState(false);
+    [compact, setCompact] = useState(false),
+    [showRemote, setShowRemote] = useState(true),
+    [showLocal, setShowLocal] = useState(true);
   const [camera, setCamera] = useState({ zoom: 1, x: 0, y: 0 });
   const { zoom } = camera,
     pan = { x: camera.x, y: camera.y };
@@ -441,16 +444,9 @@ export default function Home() {
             <RefreshCw size={15} className={busy ? 'spin' : ''} />
           </button>
         </div>
-        <div className="breadcrumb">
-          我的工作空间 <ChevronRight size={14} />
-          <span>技能大脑</span>
-        </div>
       </header>
       <div className="workspace">
         <aside className={`sidebar ${collapsed ? 'is-collapsed' : ''}`}>
-          <div className="space-label">
-            WORKSPACE <span>01</span>
-          </div>
           <div className="workspace-name">
             <Network size={18} />
             <span>我的技能宇宙</span>
@@ -703,6 +699,14 @@ export default function Home() {
                   </div>
                 </div>
                 <TabsContent value="graph" className="graph-panel">
+                  <label className="graph-network-toggle" htmlFor="web-switch">
+                    网络关联
+                    <Switch
+                      id="web-switch"
+                      checked={web}
+                      onCheckedChange={setWeb}
+                    />
+                  </label>
                   <div className="canvas-label">
                     <span className="live-dot" /> LIVE GRAPH{' '}
                     <small>{filtered.length} 个可见节点</small>
@@ -1000,14 +1004,16 @@ export default function Home() {
                     </g>
                   </svg>
                   <div className="canvas-bottom">
-                    <span className="graph-legend">
-                      <i className="legend-solid" /> 本地技能{' '}
-                      <i className="legend-hollow" /> 网络技能
-                    </span>
-                    <div className="zoom-stack">
-                      <span className="graph-hint">
-                        拖动探索 · 双击放大 · 双指缩放
+                    <div className="canvas-legend">
+                      <span className="graph-legend">
+                        <i className="legend-solid" /> 本地技能{' '}
+                        <i className="legend-hollow" /> 网络技能
                       </span>
+                      <span className="graph-legend-note">
+                        分类连线 · 虚线表示关键词关联
+                      </span>
+                    </div>
+                    <div className="zoom-stack">
                       <div className="zoom-controls">
                         <button onClick={() => zoomAt(1 / 1.3)} aria-label="缩小">
                           <Minus size={16} />
@@ -1020,6 +1026,9 @@ export default function Home() {
                           <RotateCcw size={15} />
                         </button>
                       </div>
+                      <span className="graph-legend-note graph-hint">
+                        拖动探索 · 双击放大 · 双指缩放
+                      </span>
                     </div>
                   </div>
                 </TabsContent>
@@ -1052,17 +1061,6 @@ export default function Home() {
                   )}
                 </TabsContent>
               </Tabs>
-              <footer className="graph-footer">
-                <span>分类连线 · 虚线表示关键词关联</span>
-                <label className="network-switch" htmlFor="web-switch">
-                  网络关联
-                  <Switch
-                    id="web-switch"
-                    checked={web}
-                    onCheckedChange={setWeb}
-                  />
-                </label>
-              </footer>
             </section>
           </ResizablePanel>
           {panel && (
@@ -1185,11 +1183,13 @@ export default function Home() {
                     tabIndex={0}
                     aria-label="关联发现列表"
                   >
-                    <div className="recommend-heading">
+                    <div className="recommend-heading" role="button" tabIndex={0} onClick={() => setShowRemote(!showRemote)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setShowRemote(!showRemote); }}>
                       <Globe size={16} />
                       <strong>网络相似技能</strong>
                       <span>{shownRecommendations.length}</span>
+                      <button className="section-chevron" aria-label={showRemote ? '折叠网络相似技能' : '展开网络相似技能'} onClick={(e) => { e.stopPropagation(); setShowRemote(!showRemote); }}><ChevronDown size={15} className={showRemote ? '' : 'is-closed'} /></button>
                     </div>
+                    {showRemote && <>
                     {remoteBusy && <p className="empty">正在连接公开技能库…</p>}
                     {!remoteBusy && !shownRecommendations.length && (
                       <p className="empty">
@@ -1229,11 +1229,14 @@ export default function Home() {
                         </div>
                       </a>
                     ))}
-                    <div className="recommend-heading local-heading">
+                    </>}
+                    <div className="recommend-heading local-heading" role="button" tabIndex={0} onClick={() => setShowLocal(!showLocal)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setShowLocal(!showLocal); }}>
                       <Network size={17} />
                       <strong>本地关联</strong>
                       <span>{shownRelated.length}</span>
+                      <button className="section-chevron" aria-label={showLocal ? '折叠本地关联' : '展开本地关联'} onClick={(e) => { e.stopPropagation(); setShowLocal(!showLocal); }}><ChevronDown size={15} className={showLocal ? '' : 'is-closed'} /></button>
                     </div>
+                    {showLocal && <>
                     {shownRelated.map((s) => (
                       <button
                         key={s.id}
@@ -1253,6 +1256,7 @@ export default function Home() {
                     {!shownRelated.length && (
                       <p className="empty">没有匹配的本地关联。</p>
                     )}
+                    </>}
                     <p className="remote-status">{remoteState}</p>
                     <p className="recommend-help">
                       关联依据：名称、描述中的共同关键词与能力领域。
