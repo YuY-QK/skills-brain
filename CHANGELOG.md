@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0
+
+- Added a local stdio MCP server with status, search, get, compare, and task recommendation tools.
+- Added English and Chinese task matching, with local and optional public candidates.
+- Added a Codex plugin manifest and bundled skill for combined Skill + MCP distribution.
+
+## 0.2.0
+
+- Added setup, update, diagnostics, and uninstall commands for the Codex skill and MCP registration.
+- Added managed-install markers so uninstall never removes an unrelated skill directory.
+
 ## 0.1.0
 
 - 本地 SKILL.md 扫描、去重和六类交互脑图。

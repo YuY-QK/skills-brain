@@ -1,6 +1,6 @@
 {
   "name": "skills-brain",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
@@ -9,10 +9,15 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext dev --port 5173",
+    "setup": "node scripts/manage.mjs install",
+    "update": "node scripts/manage.mjs update",
+    "uninstall": "node scripts/manage.mjs uninstall",
+    "doctor": "node scripts/manage.mjs doctor",
+    "mcp": "node server/mcp.mjs",
     "lint": "oxlint",
     "format": "oxfmt",
     "typecheck": "tsc --noEmit",
-    "test": "node --test server/skills.test.mjs"
+    "test": "node --test server/*.test.mjs"
   },
   "dependencies": {
     "react": "19.2.6",

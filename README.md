@@ -8,7 +8,7 @@ Local-first · Interactive graph · Related skills · Source reader
 
 **English** | [简体中文](README.zh-CN.md)
 
-[Quick start](#quick-start) · [Features](#features) · [Install-as-an-agent-skill](#install-as-an-agent-skill) · [Configuration](#configuration) · [Contributing](CONTRIBUTING.md)
+[Quick start](#quick-start) · [Codex integration](#codex-integration) · [Features](#features) · [Configuration](#configuration) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
@@ -20,19 +20,19 @@ The application interface is currently in Simplified Chinese. This README docume
 
 ## Features
 
-| Capability | How it works |
-| --- | --- |
-| Local discovery | Scan personal, system, and plugin-cache directories; deduplicate by content hash; refresh with Sync skills |
+| Capability           | How it works                                                                                                                     |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Local discovery      | Scan personal, system, and plugin-cache directories; deduplicate by content hash; refresh with Sync skills                       |
 | Six capability areas | Design & creativity, development & building, documents & communication, knowledge & research, data & analysis, tools & workflows |
-| Interactive graph | Focus a category cluster, highlight parent nodes, or isolate a selected skill |
-| Navigation | Drag to pan, double-click repeatedly to zoom in, pinch on a trackpad or touchscreen, and use zoom/reset controls |
-| List filtering | Search names and descriptions; selecting a skill filters the list to it; dismiss the selected-name chip to clear the selection |
-| Collapsible sidebar | Use the header button, click the sidebar edge, or drag it left/right; icons remain visible when collapsed |
-| Folder shortcuts | Open a skill's containing folder from its sidebar entry |
-| Source reader | Open the document icon next to the skill name for a separate, keyboard-accessible reading dialog |
-| Related skills | Match names, descriptions, and categories; inspect GitHub sources and shared-keyword tags |
-| Resizable inspector | Drag the divider to resize the desktop inspector, with a 300px minimum; skill details stay fixed while related results scroll |
-| Keyboard and motion | Select graph nodes and adjust dividers with the keyboard; node animation respects reduced-motion preferences |
+| Interactive graph    | Focus a category cluster, highlight parent nodes, or isolate a selected skill                                                    |
+| Navigation           | Drag to pan, double-click repeatedly to zoom in, pinch on a trackpad or touchscreen, and use zoom/reset controls                 |
+| List filtering       | Search names and descriptions; selecting a skill filters the list to it; dismiss the selected-name chip to clear the selection   |
+| Collapsible sidebar  | Use the header button, click the sidebar edge, or drag it left/right; icons remain visible when collapsed                        |
+| Folder shortcuts     | Open a skill's containing folder from its sidebar entry                                                                          |
+| Source reader        | Open the document icon next to the skill name for a separate, keyboard-accessible reading dialog                                 |
+| Related skills       | Match names, descriptions, and categories; inspect GitHub sources and shared-keyword tags                                        |
+| Resizable inspector  | Drag the divider to resize the desktop inspector, with a 300px minimum; skill details stay fixed while related results scroll    |
+| Keyboard and motion  | Select graph nodes and adjust dividers with the keyboard; node animation respects reduced-motion preferences                     |
 
 ## Quick start
 
@@ -62,17 +62,68 @@ Open **[http://127.0.0.1:5173](http://127.0.0.1:5173)**. Keep the terminal runni
 
 This is a source-installed local application. Standalone desktop installers and an npm registry package are not currently provided.
 
+### Guided setup for Codex
+
+After cloning and running `npm ci`, register the bundled Skill and local MCP server:
+
+```sh
+npm run setup
+```
+
+Restart Codex after setup. Diagnose the installation with `npm run doctor`. The installer refuses to overwrite a skill directory it did not create.
+
+Choose either this setup method or the marketplace method below. Installing both creates duplicate `skills-brain` entries.
+
 ### Updating
 
 Stop the server, preserve any personal configuration changes, then run:
 
 ```sh
-git pull --ff-only
-npm ci
-npm start
+npm run update
 ```
 
 If you have edited the source, commit or back up your changes before updating.
+
+To remove the managed Skill and MCP registration while keeping the application checkout:
+
+```sh
+npm run uninstall
+```
+
+This command removes only the guided-setup installation. A marketplace-installed plugin is managed with `codex plugin remove skills-brain@personal`.
+
+## Codex integration
+
+Version 0.3 includes a read-only local MCP server. Once `npm run setup` has registered it and Codex has restarted, Codex can use five tools without requiring the graph page to be open:
+
+| Tool                    | Purpose                                                              |
+| ----------------------- | -------------------------------------------------------------------- |
+| `skills_catalog_status` | Count discovered skills, inspect categories, roots, and scan errors  |
+| `skills_search`         | Search local skill metadata by task, capability, category, or source |
+| `skills_get`            | Inspect one local skill; full source is opt-in                       |
+| `skills_compare`        | Compare two to five local skills and show shared keywords            |
+| `skills_recommend`      | Recommend local and optional public candidates for a concrete task   |
+
+Example prompts:
+
+> Search my installed skills for building an accessible dashboard.
+
+> Compare ui-ux-pro-max and ui-styling, then recommend which one fits a React admin page.
+
+> 为“分析财务表格并制作汇报”推荐本地技能，并说明使用顺序。
+
+Recommendations use deterministic keyword/category heuristics. Codex can interpret the returned candidates and create a task-specific plan, but results do not activate or install skills automatically.
+
+The repository is also a Codex plugin package through [`.codex-plugin/plugin.json`](.codex-plugin/plugin.json), combining the bundled Skill and MCP server. The `npm run setup` path is the most predictable installation method for the current source release.
+
+Alternatively, install it through the repository marketplace without running `npm run setup`:
+
+```sh
+codex plugin marketplace add YuY-QK/skills-brain --ref main
+codex plugin add skills-brain@personal
+```
+
+Restart Codex after installation. Use `codex plugin marketplace upgrade personal` to fetch a newer marketplace snapshot, then reinstall the plugin through Codex. The plugin package contains its own MCP runtime files, so it works from Codex's plugin cache without the source checkout.
 
 ## Install as an Agent Skill
 
@@ -90,6 +141,8 @@ If your agent uses another skill location, change the destination accordingly. O
 > Use skills-brain to open my local skill graph and find related design skills.
 
 Install the application separately using the quick-start steps above. Do not copy `node_modules` into your skill directory.
+
+The instruction-only installation can guide launching and browsing, but it does not expose the five MCP tools. Use `npm run setup` for the complete v0.3 integration.
 
 ## Configuration
 
@@ -167,9 +220,12 @@ Core structure:
 app/page.tsx             Graph, selection state, panels, and gestures
 app/globals.css          Theme, layout, and animation
 server/skills.mjs        Scanner, public-source fetching, local endpoints, folder launching
-server/skills.test.mjs   Metadata parsing, scanning, and folder-launch tests
+server/mcp.mjs           Read-only stdio MCP server for Codex
+scripts/manage.mjs       Setup, update, diagnostics, and uninstall lifecycle
+server/*.test.mjs        Scanner, matching, folder-launch, and MCP protocol tests
 components/ui/          Accessible interface primitives
-SKILL.md                Agent Skill entry point
+skills/skills-brain/    Plugin-bundled Agent Skill
+SKILL.md                Standalone Agent Skill entry point
 ```
 
 Built with React 19, TypeScript, Vinext / Vite, Tailwind CSS, Base UI, Lucide, and react-resizable-panels. Browser interactions and platform-specific file-manager behavior should still be verified on your target devices.

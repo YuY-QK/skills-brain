@@ -1,0 +1,23 @@
+{
+  "name": "skills-brain",
+  "version": "0.3.0",
+  "description": "Explore, search, compare, and recommend local Agent Skills.",
+  "author": {
+    "name": "YuY-QK"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Skills Brain",
+    "shortDescription": "Explore and recommend local Agent Skills.",
+    "longDescription": "Skills Brain adds a local skill graph and read-only MCP tools for searching, reading, comparing, and recommending Agent Skills.",
+    "developerName": "YuY-QK",
+    "category": "Productivity",
+    "capabilities": [
+      "Local skill discovery",
+      "Skill comparison",
+      "Task-based recommendations"
+    ],
+    "defaultPrompt": "Search my local Agent Skills and recommend the best skills for this task."
+  },
+  "mcpServers": "./.mcp.json"
+}

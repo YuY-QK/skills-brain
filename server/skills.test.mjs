@@ -8,6 +8,8 @@ import {
   classify,
   scanSkills,
   openSkillFolder,
+  searchCatalog,
+  recommendSkills,
 } from './skills.mjs';
 test('reads quoted and folded YAML descriptions without absorbing fields', () => {
   assert.deepEqual(
@@ -61,4 +63,24 @@ test('folder opening accepts only indexed IDs and passes a literal directory arg
   call = null;
   await assert.rejects(openSkillFolder('../../etc', skills, launch, 'darwin'));
   assert.equal(call, null);
+});
+
+test('search and recommendation support English and Chinese task language', () => {
+  const skills = [
+    {
+      id: 'design',
+      name: 'frontend-design',
+      description: 'Design a polished user interface',
+      group: 'design',
+    },
+    {
+      id: 'sheet',
+      name: 'spreadsheets',
+      description: 'Create and analyze Excel workbooks',
+      group: 'data',
+    },
+  ];
+  assert.equal(searchCatalog(skills, 'frontend')[0].id, 'design');
+  assert.equal(recommendSkills(skills, '设计一个网页界面')[0].id, 'design');
+  assert.equal(recommendSkills(skills, '分析财务表格')[0].id, 'sheet');
 });
