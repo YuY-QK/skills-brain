@@ -114,6 +114,24 @@ input {
   align-items: center;
   gap: 11px;
 }
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.sync-button {
+  width: 29px;
+  height: 29px;
+  color: #a99cf0;
+}
+.sync-button:hover:not(:disabled) {
+  background: #29263c;
+  color: #e1d7ff;
+}
+.sync-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
 .brand-symbol {
   display: grid;
   place-items: center;
@@ -337,6 +355,14 @@ i {
   color: #aab4c4;
   font-size: 12px;
   margin-top: 16px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border-radius: 7px;
+}
+.library-status:hover {
+  background: #202530;
+  color: #e2d2ff;
 }
 .library-status small {
   display: block;
@@ -399,6 +425,14 @@ h1 span {
   gap: 26px;
   padding: 25px 30px 22px;
 }
+.toolbar-stats {
+  padding: 0;
+  gap: 16px;
+  min-width: 0;
+}
+.toolbar-stats strong {
+  font-size: 18px;
+}
 .stats > div {
   display: flex;
   align-items: center;
@@ -434,6 +468,18 @@ h1 span {
   border-bottom: 1px solid #282f3b;
   gap: 12px;
 }
+.graph-toolbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 0;
+}
+.current-category {
+  color: #9aa5b9;
+  font-size: 11px;
+  white-space: nowrap;
+}
 .view-options {
   background: #1b202a !important;
   padding: 3px !important;
@@ -448,13 +494,6 @@ h1 span {
 .view-options [data-active] {
   background: #303444 !important;
   color: #e3dbfb !important;
-}
-.graph-settings {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: #9aa5b9;
-  font-size: 11px;
 }
 .toolbar-divider {
   height: 15px;
@@ -563,12 +602,27 @@ h1 span {
   right: 23px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   pointer-events: none;
 }
 .graph-hint {
   color: #7f8ba0;
   font-size: 10px;
+  text-align: right;
+  margin-bottom: 7px;
+}
+.graph-legend {
+  display: flex;
+  align-items: center;
+  color: #828fa3;
+  font-size: 10px;
+  gap: 7px;
+}
+.zoom-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: none;
 }
 .zoom-controls {
   display: flex;
@@ -607,6 +661,12 @@ h1 span {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+.network-switch {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #9aa5b9;
 }
 .legend-solid,
 .legend-hollow {
@@ -1376,6 +1436,10 @@ h1 span {
   background: transparent;
   margin: 0;
   border-radius: 8px;
+}
+.inspector-toggle {
+  margin-left: auto;
+  flex-shrink: 0;
 }
 .skill-title-row {
   display: flex;

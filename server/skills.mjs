@@ -200,6 +200,21 @@ export async function openSkillFolder(
   await launch(command, [folder]);
   return { ok: true };
 }
+export async function openSkillsRoot(
+  scanRoots = roots,
+  launch = runFile,
+  platform = process.platform,
+) {
+  const folder = scanRoots[0];
+  const command =
+    platform === 'darwin'
+      ? 'open'
+      : platform === 'win32'
+        ? 'explorer.exe'
+        : 'xdg-open';
+  await launch(command, [folder]);
+  return { ok: true };
+}
 export const repositories = ['anthropics/skills', 'vercel-labs/agent-skills'];
 
 const ignoredWords = new Set([
@@ -413,7 +428,11 @@ export default function skillsPlugin() {
                 return res.end(JSON.stringify({ error: '请求过长' }));
               }
             }
-            const { id } = JSON.parse(body);
+            const { id, root } = JSON.parse(body);
+            if (root === true) {
+              res.end(JSON.stringify(await openSkillsRoot()));
+              return;
+            }
             if (typeof id !== 'string' || !/^[a-f0-9]{16}$/.test(id)) {
               res.statusCode = 400;
               return res.end(JSON.stringify({ error: '无效的技能 ID' }));

@@ -151,6 +151,20 @@ export default function Home() {
       setFolderMessage((e as Error).message);
     }
   }
+  async function openLibraryRoot() {
+    try {
+      const response = await fetch('/api/open-folder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ root: true }),
+      });
+      const result = (await response.json()) as { error?: string };
+      if (!response.ok) throw new Error(result.error || '无法打开技能根目录');
+      setFolderMessage('已打开本地技能根目录');
+    } catch (e) {
+      setFolderMessage((e as Error).message);
+    }
+  }
   const [collapsed, setCollapsed] = useState(false),
     [focusedSkill, setFocusedSkill] = useState<string | null>(null),
     [connectionQuery, setConnectionQuery] = useState(''),
@@ -407,28 +421,29 @@ export default function Home() {
   return (
     <main className="app-shell">
       <header className="topbar">
-        <a className="brand" href="/" aria-label="Skills Brain 首页">
-          <span className="brand-symbol">
-            <Brain size={23} />
-          </span>
-          <strong>
-            skills<span>brain</span>
-          </strong>
-          <span className="beta">LOCAL</span>
-        </a>
+        <div className="brand-wrap">
+          <a className="brand" href="/" aria-label="Skills Brain 首页">
+            <span className="brand-symbol">
+              <Brain size={23} />
+            </span>
+            <strong>
+              skills<span>brain</span>
+            </strong>
+            <span className="beta">LOCAL</span>
+          </a>
+          <button
+            className="icon-button sync-button"
+            title={busy ? '正在同步技能' : '同步技能'}
+            aria-label={busy ? '正在同步技能' : '同步技能'}
+            onClick={scan}
+            disabled={busy}
+          >
+            <RefreshCw size={15} className={busy ? 'spin' : ''} />
+          </button>
+        </div>
         <div className="breadcrumb">
           我的工作空间 <ChevronRight size={14} />
           <span>技能大脑</span>
-        </div>
-        <div className="top-actions">
-          <span className="local-status">
-            <i /> {library ? '本地已连接' : busy ? '正在连接' : '连接失败'}
-          </span>
-          <button className="button" onClick={scan} disabled={busy}>
-            <RefreshCw size={15} className={busy ? 'spin' : ''} />{' '}
-            {busy ? '扫描中' : '同步技能'}
-          </button>
-          <span className="avatar">Y</span>
         </div>
       </header>
       <div className="workspace">
@@ -546,14 +561,19 @@ export default function Home() {
               <p className="empty">没有匹配的技能，试试其他关键词。</p>
             )}
           </div>
-          <div className="library-status">
+          <button
+            className="library-status"
+            title="打开本地技能根目录"
+            aria-label="打开本地技能根目录"
+            onClick={openLibraryRoot}
+          >
             <Folder size={17} />
             <div>
               本地技能库
               <small>{library?.roots.length || 3} 个目录 · 只读连接</small>
             </div>
             <i />
-          </div>
+          </button>
         </aside>
         <div
           className="sidebar-edge"
@@ -621,47 +641,38 @@ export default function Home() {
                   </h1>
                   <p>让独立的技能，连接成完整的能力。</p>
                 </div>
-                <button
-                  className="icon-button panel-toggle"
-                  aria-label={panel ? '关闭详情' : '打开详情'}
-                  onClick={() => setPanel(!panel)}
-                >
-                  {panel ? (
-                    <PanelRightClose size={19} />
-                  ) : (
+                {!panel && (
+                  <button
+                    className="icon-button panel-toggle"
+                    aria-label="打开详情"
+                    onClick={() => setPanel(true)}
+                  >
                     <PanelRightOpen size={19} />
-                  )}
-                </button>
-              </div>
-              <div className="stats">
-                <div>
-                  <strong>{skills.length.toString().padStart(2, '0')}</strong>
-                  <span>本地技能</span>
-                </div>
-                <span className="stat-divider" />
-                <div>
-                  <strong>06</strong>
-                  <span>能力领域</span>
-                </div>
-                <span className="stat-divider" />
-                <div>
-                  <strong>{remote.length.toString().padStart(2, '0')}</strong>
-                  <span>网络技能</span>
-                  <i className="live-dot" />
-                </div>
+                  </button>
+                )}
               </div>
               <Tabs value={view} onValueChange={setView} className="view-tabs">
                 <div className="graph-toolbar">
-                  <TabsList className="view-options">
-                    <TabsTrigger value="graph">
-                      <Network size={16} /> 脑图
-                    </TabsTrigger>
-                    <TabsTrigger value="list">
-                      <Layers size={16} /> 列表
-                    </TabsTrigger>
-                  </TabsList>
-                  <div className="graph-settings">
-                    {(focusedSkill || category !== 'all') && (
+                  <div className="stats toolbar-stats">
+                    <div>
+                      <strong>{skills.length.toString().padStart(2, '0')}</strong>
+                      <span>本地技能</span>
+                    </div>
+                    <span className="stat-divider" />
+                    <div>
+                      <strong>06</strong>
+                      <span>能力领域</span>
+                    </div>
+                    <span className="stat-divider" />
+                    <div>
+                      <strong>{remote.length.toString().padStart(2, '0')}</strong>
+                      <span>网络技能</span>
+                      <i className="live-dot" />
+                    </div>
+                  </div>
+                  <div className="graph-toolbar-right">
+                    <span className="toolbar-divider" />
+                    {focusedSkill || category !== 'all' ? (
                       <button
                         className="clear-selection"
                         title="清除单个技能筛选"
@@ -674,19 +685,21 @@ export default function Home() {
                         </span>{' '}
                         <X size={12} />
                       </button>
-                    )}
-                    <label htmlFor="web-switch">网络关联</label>
-                    <Switch
-                      id="web-switch"
-                      checked={web}
-                      onCheckedChange={setWeb}
-                    />
-                    <span className="toolbar-divider" />
-                    <span>
+                    ) : (
+                      <span className="current-category">
                       {category === 'all'
                         ? '全部领域'
                         : groups.find((g) => g.id === category)?.name}
-                    </span>
+                      </span>
+                    )}
+                    <TabsList className="view-options">
+                      <TabsTrigger value="graph">
+                        <Network size={16} /> 脑图
+                      </TabsTrigger>
+                      <TabsTrigger value="list">
+                        <Layers size={16} /> 列表
+                      </TabsTrigger>
+                    </TabsList>
                   </div>
                 </div>
                 <TabsContent value="graph" className="graph-panel">
@@ -987,20 +1000,26 @@ export default function Home() {
                     </g>
                   </svg>
                   <div className="canvas-bottom">
-                    <span className="graph-hint">
-                      拖动探索 · 双击放大 · 双指缩放
+                    <span className="graph-legend">
+                      <i className="legend-solid" /> 本地技能{' '}
+                      <i className="legend-hollow" /> 网络技能
                     </span>
-                    <div className="zoom-controls">
-                      <button onClick={() => zoomAt(1 / 1.3)} aria-label="缩小">
-                        <Minus size={16} />
-                      </button>
-                      <span>{Math.round(zoom * 100)}%</span>
-                      <button onClick={() => zoomAt(1.3)} aria-label="放大">
-                        <Plus size={16} />
-                      </button>
-                      <button onClick={reset} aria-label="重置视图">
-                        <RotateCcw size={15} />
-                      </button>
+                    <div className="zoom-stack">
+                      <span className="graph-hint">
+                        拖动探索 · 双击放大 · 双指缩放
+                      </span>
+                      <div className="zoom-controls">
+                        <button onClick={() => zoomAt(1 / 1.3)} aria-label="缩小">
+                          <Minus size={16} />
+                        </button>
+                        <span>{Math.round(zoom * 100)}%</span>
+                        <button onClick={() => zoomAt(1.3)} aria-label="放大">
+                          <Plus size={16} />
+                        </button>
+                        <button onClick={reset} aria-label="重置视图">
+                          <RotateCcw size={15} />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </TabsContent>
@@ -1034,11 +1053,15 @@ export default function Home() {
                 </TabsContent>
               </Tabs>
               <footer className="graph-footer">
-                <span>
-                  <i className="legend-solid" /> 本地技能{' '}
-                  <i className="legend-hollow" /> 网络技能
-                </span>
                 <span>分类连线 · 虚线表示关键词关联</span>
+                <label className="network-switch" htmlFor="web-switch">
+                  网络关联
+                  <Switch
+                    id="web-switch"
+                    checked={web}
+                    onCheckedChange={setWeb}
+                  />
+                </label>
               </footer>
             </section>
           </ResizablePanel>
@@ -1064,6 +1087,13 @@ export default function Home() {
                         <Orbit size={20} />
                       </div>
                       <span>技能详情</span>
+                      <button
+                        className="icon-button panel-toggle inspector-toggle"
+                        aria-label="关闭详情"
+                        onClick={() => setPanel(false)}
+                      >
+                        <PanelRightClose size={19} />
+                      </button>
                     </div>
                     {current && (
                       <>

@@ -8,6 +8,7 @@ import {
   classify,
   scanSkills,
   openSkillFolder,
+  openSkillsRoot,
   searchCatalog,
   recommendSkills,
 } from './skills.mjs';
@@ -63,6 +64,15 @@ test('folder opening accepts only indexed IDs and passes a literal directory arg
   call = null;
   await assert.rejects(openSkillFolder('../../etc', skills, launch, 'darwin'));
   assert.equal(call, null);
+});
+
+test('library root shortcut opens the configured first scan root', async () => {
+  let call;
+  const launch = async (...args) => {
+    call = args;
+  };
+  await openSkillsRoot(['/tmp/skills root'], launch, 'darwin');
+  assert.deepEqual(call, ['open', ['/tmp/skills root']]);
 });
 
 test('search and recommendation support English and Chinese task language', () => {
